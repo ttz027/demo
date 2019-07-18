@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+    <script src="angular.min.js"></script>
+    <script src="jquery-1.12.4.js"></script>
+    <script>
+
+
+        //创建一个模块,第一个参数是模块名，第二个参数是加载其他模块，如果没有可空着
+        var app = angular.module("kk",[]);
+        //创建控制器
+        //$scope页面和js的一个数据交互的桥梁
+        app.controller("mycontroller",function($scope,$http){
+            //定义数组
+            $scope.students = function(){
+                $http.get("findAll").success(function(respon){
+                    $scope.list=respon;
+                })
+            }
+            // $scope.goods = {"id":id};
+            $scope.del = function(id){
+               // var  goods = {"id":id};
+                $http.get("delid?id="+id).success(function(respon){
+                    alert("："+respon);
+                    if(respon==1){
+                        alert("删除成功");
+                        $scope.students();
+                    }
+                })
+            }
+        });
+    </script>
+</head>
+<body ng-app="kk" ng-controller="mycontroller" ng-init="students()">
+    this is a index page
+    <table border="1">
+        <tr ng-repeat="student in list">
+
+            <td>{{student.id}}</td>
+            <td>{{student.name}}</td>
+            <td>{{student.price}}</td>
+            <td><button ng-click="del(student.id)">点击</button></td>
+        </tr>
+    </table>
+</body>
+</html>
